@@ -2,7 +2,7 @@ body {
     background-color: aquamarine;
 }
 
-.questiondisplay{
+.questionStyle{
     background-color: bisque;
     width: 600px;
     height: 200px;
@@ -10,7 +10,7 @@ body {
     align-content: center;
     margin-left: 400px;
 }
-.answersbtn {
+.answerBtn {
     background-color: coral;
    height: 50px;
    width: 600px;
