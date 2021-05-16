@@ -39,13 +39,13 @@ let questionData = [
 // this function starts the game time and displays it 
 function timeHandler () {
     let startGameTimeEl = 10;
-    console.log(playerAns);
+    console.log("player ans =", playerAns);
     
     let timeInterval = setInterval (function () {
     if (startGameTimeEl > 1) {
         currentTimeEl.textContent = startGameTimeEl + ' seconds remaining';
         startGameTimeEl--;
-        nextQuestion();
+       nextQuestion();
         // pointsCalculator ();
     }
     else if (startGameTimeEl === 1) {
@@ -61,36 +61,34 @@ function timeHandler () {
 }
 
 // this funtion determines the points logic.
-// function pointsCalculator () {
-// playerAns = event.target.textContent; 
-//     if (this.value === questionData[currentIndex].answer){
-//             nextQuestion();
-//         } else if (this.value !== questionData[currentIndex].answer) {
-//             currentTimeEl -= 10;
-//             nextQuestion ();
-//         }else if (questionNumber > q) {
-//             window.alert("the game is now finished");
-//             storeInitials();
-// }}
+function pointsCalculator () {
+playerAns = event.target.textContent; 
+    if (this.value === questionData[currentIndex].answer){
+            nextQuestion();
+        } else if (this.value !== questionData[currentIndex].answer) {
+            currentTimeEl -= 10;
+            nextQuestion ();
+        }else if (questionNumber > q) {
+            window.alert("the game is now finished");
+            storeInitials();
+}}
 
 // this functoin will generate the next question
 function nextQuestion () {
-    let currentQuestion = document.createElement('p');
-    currentQuestion = questionData[currentIndex].title;
     let currentAnswersChoice = currentQuestion.choices;
-    console.log("current ans choice =",currentAnswersChoice);
-    console.log("current question", currentQuestion);
-    questionContainer.textContent = currentQuestion[currentIndex].title;
+    let currentQuestion = document.createElement('p');
+    currentQuestion.textContent = questionData[currentIndex].title
     questionContainer.appendChild(currentQuestion);
-   
+    console.log("current question", currentQuestion);
+    console.log("current ans choice =",currentAnswersChoice);
+    
     for (var i=0; i < currentAnswersChoice.length; i++) {
         let answerBtn = document.createElement('button');
-        
-        answerBtn.textContent = currentAnswersChoice[i]
-        answerBtn.onclick = pointsCalculator;
         answerBtn.setAttribute("class", currentAnswersChoice[i]);
         answerBtn.className = ".answerBtn", currentAnswersChoice[i];
+        answerBtn.textContent = currentAnswersChoice[i];
         answerContainer.appendChild(answerBtn);
+        answerBtn.onclick = pointsCalculator;
         currentIndex++;
     }
 }
