@@ -36,17 +36,19 @@ let questionData = [
     },
 ]
 
+function runGame () {
+    timeHandler();
+    nextQuestion();
+}
 // this function starts the game time and displays it 
 function timeHandler () {
-    let startGameTimeEl = 10;
+    let startGameTimeEl = 20;
     console.log("player ans =", playerAns);
     
     let timeInterval = setInterval (function () {
     if (startGameTimeEl > 1) {
         currentTimeEl.textContent = startGameTimeEl + ' seconds remaining';
         startGameTimeEl--;
-       nextQuestion();
-        // pointsCalculator ();
     }
     else if (startGameTimeEl === 1) {
         currentTimeEl.textContent = startGameTimeEl + ' second remaining';
@@ -61,12 +63,12 @@ function timeHandler () {
 }
 
 // this funtion determines the points logic.
-function pointsCalculator () {
+function pointsCalculator () {startGameTimeEl -= 10;
 playerAns = event.target.textContent; 
     if (this.value === questionData[currentIndex].answer){
-            nextQuestion();
+        remove.c    
+        nextQuestion();
         } else if (this.value !== questionData[currentIndex].answer) {
-            currentTimeEl -= 10;
             nextQuestion ();
         }else if (questionNumber > q) {
             window.alert("the game is now finished");
@@ -75,18 +77,13 @@ playerAns = event.target.textContent;
 
 // this functoin will generate the next question
 function nextQuestion () {
-    
     let currentQuestion = questionData[currentIndex];
     let questionEl = document.createElement('p');
     questionEl.textContent = currentQuestion.title;
-    questionContainer.appendChild(questionEl);
-    console.log("current question", questionEl);
-    
+    questionContainer.appendChild(questionEl);    
     let currentAnswersChoice = currentQuestion.choices;
     
-    for (var i=0; i < currentAnswersChoice.length; i++) {
-        console.log("current ans choice =",currentAnswersChoice);
-        
+    for (var i=0; i < currentAnswersChoice.length; i++) {        
         let answerBtn = document.createElement('button');
         answerBtn.setAttribute("class", currentAnswersChoice[i]);
         answerBtn.className = "answerBtn";
@@ -96,18 +93,33 @@ function nextQuestion () {
     }
     currentIndex++;
 }
-
-nextQuestion();
-// // function to stop and reset the game and timer
-// function endQuiz () {
-//     currentTimeEl.textContent == '';
-//     clearInterval(timeInterval);}
+// function to stop and reset the game and timer
+function endQuiz () {
+    currentTimeEl.textContent == '';
+    clearInterval(timeInterval);}
 
 // function to store the initials function to keep the high scores function to submit the scores
-// function storeInitials () {
-// }
+function storeInitials () {
+}
+function removeExistingQuestionAnswerChildEl (){
+    let removeAnswerParent = document.getElementById("answerSectionEvent");
+    let removeAnswerChild0 = removeAnswerParent.getElementsByTagName("button")[0];
+    let removeAnswerChild1 = removeAnswerParent.getElementsByTagName("button")[1];
+    let removeAnswerChild2 = removeAnswerParent.getElementsByTagName("button")[2];
+    let removeAnswerChild3 = removeAnswerParent.getElementsByTagName("button")[3];
+    let removeQuestionParent = document.getElementById("questionSectionEvent");
+    let removeQuestionChild = removeQuestionParent.getElementsByTagName("p")[0];
+    removeAnswerParent.removeChild(removeAnswerChild0);
+    removeAnswerParent.removeChild(removeAnswerChild1);
+    removeAnswerParent.removeChild(removeAnswerChild2);
+    removeAnswerParent.removeChild(removeAnswerChild3);
+    removeQuestionParent.removeChild(removeQuestionChild);
 
-startGame.onclick = timeHandler;
+    
+}
+
+startGame.onclick = runGame;
 // endGame.onclick= endQuiz;
 answerSectionEvent.addEventListener("click", playerAns);
+answerBtn.onclick = removeExistingQuestionAnswerChildEl;
 
