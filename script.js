@@ -37,28 +37,28 @@ let questionData = [
 ]
 
 // this function starts the game time and displays it 
-// function timeHandler () {
-//     let startGameTimeEl = 10;
-//     console.log("player ans =", playerAns);
+function timeHandler () {
+    let startGameTimeEl = 10;
+    console.log("player ans =", playerAns);
     
-//     let timeInterval = setInterval (function () {
-//     if (startGameTimeEl > 1) {
-//         currentTimeEl.textContent = startGameTimeEl + ' seconds remaining';
-//         startGameTimeEl--;
-//        nextQuestion();
-//         // pointsCalculator ();
-//     }
-//     else if (startGameTimeEl === 1) {
-//         currentTimeEl.textContent = startGameTimeEl + ' second remaining';
-//         startGameTimeEl--;
-//     }
-//     else {
-//         currentTimeEl.textContent == '';
-//         clearInterval(timeInterval);
-//         window.alert("game over");
-//     }
-//         }, 1000);
-// }
+    let timeInterval = setInterval (function () {
+    if (startGameTimeEl > 1) {
+        currentTimeEl.textContent = startGameTimeEl + ' seconds remaining';
+        startGameTimeEl--;
+       nextQuestion();
+        // pointsCalculator ();
+    }
+    else if (startGameTimeEl === 1) {
+        currentTimeEl.textContent = startGameTimeEl + ' second remaining';
+        startGameTimeEl--;
+    }
+    else {
+        currentTimeEl.textContent == '';
+        clearInterval(timeInterval);
+        window.alert("game over");
+    }
+        }, 1000);
+}
 
 // this funtion determines the points logic.
 function pointsCalculator () {
@@ -89,12 +89,12 @@ function nextQuestion () {
         
         let answerBtn = document.createElement('button');
         answerBtn.setAttribute("class", currentAnswersChoice[i]);
-        answerBtn.className = ".answerBtn", currentAnswersChoice[i];
+        answerBtn.className = "answerBtn";
         answerBtn.textContent = currentAnswersChoice[i];
         answerContainer.appendChild(answerBtn);
         answerBtn.onclick = pointsCalculator;
-        currentIndex++;
     }
+    currentIndex++;
 }
 
 nextQuestion();
@@ -108,6 +108,6 @@ nextQuestion();
 // }
 
 startGame.onclick = timeHandler;
-endGame.onclick= endQuiz;
-// answerSectionEvent.addEventListener("click", playerAns);
+// endGame.onclick= endQuiz;
+answerSectionEvent.addEventListener("click", playerAns);
 
