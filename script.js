@@ -1,12 +1,11 @@
 
-// function to stop and reset the game and timer
-// function to store the initials function to keep the high scores function to submit the scores
 // function to clear reset the score table
 
 let answerSectionEvent = document.querySelector('#answerSectionEvent');
 let finishGameTimeEl = 0;
 let currentTimeEl = document.getElementById('currentTimeEl')
 let startGame =document.getElementById('startBtn');
+let endGame = document.getElementById('endBtn');
 let answerContainer = document.querySelector('.answerSection');
 let questionContainer = document.querySelector('.questionSection');
 let questionDisplay = document.querySelector('.questionStyle');
@@ -16,7 +15,7 @@ let answerBtn1 = document.createElement('button');
 let answerBtn2 = document.createElement('button');
 let answerBtn3 = document.createElement('button');
 let answerBtn4 = document.createElement('button');
-
+let playerAns ='';
 let questionData = [
     {
         title:"This is question1", 
@@ -33,21 +32,24 @@ let questionData = [
         choices:["question 4 answer 1",'correct answer','question 4 answer 3','correct answer'],
     },
 ]
-let ans1 = questionData[0].choices[1];
-let ans2 = questionData[1].choices[1];
-let ans3 = questionData[2].choices[0];
-let ans4 = questionData[3].choices[2];
-let answers = [ans1, ans2, ans3, ans4];
+let ans0 = questionData[0].choices[1];
+let ans1 = questionData[1].choices[1];
+let ans2 = questionData[2].choices[0];
+let ans3 = questionData[3].choices[2];
+let answers = [ans0, ans1, ans2, ans3];
 
 // this function starts the game time and displays it 
-let timeHandler = function () {
+function timeHandler () {
     createQuestionAnswerElement();
     nextQuestion();
     let startGameTimeEl = 100;
-    let timeInterval = setInterval(function () {
-        if (startGameTimeEl > 1) {
+    console.log(playerAns);
+    
+    let timeInterval = setInterval (function () {
+    if (startGameTimeEl > 1) {
         currentTimeEl.textContent = startGameTimeEl + ' seconds remaining';
         startGameTimeEl--;
+        pointsCalculator ();
     }
     else if (startGameTimeEl === 1) {
         currentTimeEl.textContent = startGameTimeEl + ' second remaining';
@@ -60,59 +62,66 @@ let timeHandler = function () {
     }
         }, 1000);
 }
+
+function pointsCalculator () {
+playerAns = event.target.textContent; 
+    if (playerAns === answers[q]){
+            nextQuestion();
+        } else if (playerAns !== answers[q]) {
+            currentTimeEl -= 10;
+            nextQuestion ();
+        }else if (questionNumber > q) {
+            window.alert("the game is now finished");
+            storeInitials();
+}}
+
+// this functoin will generate the next question
+function nextQuestion (q) {
+    for (q=0; q < questionNumber; q++);
+    answerButtonHandler(q);
+    questionNumber ++;
+}
+// this funtion determines the points logic.
 // this function will create the question and answer buttons on the page
  function answerButtonHandler () {
+    question.textContent = questionData[questionNumber].title; 
     answerBtn1.textContent = questionData[questionNumber].choices[0];
     answerBtn2.textContent = questionData[questionNumber].choices[1];
     answerBtn3.textContent = questionData[questionNumber].choices[2];
     answerBtn4.textContent = questionData[questionNumber].choices[3];
 }
-// this functoin will generate the next question and determines the right answer
-function nextQuestion (q) {
-    for (q=0; q < questionNumber; q++);
-    answerButtonHandler(q);
-    var playerAns = event.target.textContent;
 
-    if(playerAns === answers[q])   {       
-        window.alert('correct answer');
-        questionNumber ++;
-    }
-    if (questionNumber > q) {
-        window.alert("the game is now finished");
-        questionNumber ='';
-        removeChild(answerContainer);
-        currentTimeEl -= 10;
-    }else {
-        questionNumber ++;
-    }
-}
-
+// function to create the question and answer dom elements
 function createQuestionAnswerElement () { 
     question.className ='questionStyle';
-    question.textContent = questionData[questionNumber].title;
     questionContainer.appendChild(question);
 
     answerBtn1.className = 'answerBtn';
-    answerBtn1.setAttribute = ('btn-id');
     answerContainer.appendChild(answerBtn1);
 
     answerBtn2.className = 'answerBtn';
-    answerBtn2.setAttribute = ('btn-id');
     answerContainer.appendChild(answerBtn2);
 
-
     answerBtn3.className = 'answerBtn';
-    answerBtn3.setAttribute = ('btn-id');
     answerContainer.appendChild(answerBtn3);
 
     answerBtn4.className = 'answerBtn';
-    answerBtn4.setAttribute = ('btn-id');
     answerContainer.appendChild(answerBtn4);
 
 }
 
+// function to stop and reset the game and timer
+function endQuiz () {
+    currentTimeEl.textContent == '';
+    clearInterval(timeInterval);}
+
+// function to store the initials function to keep the high scores function to submit the scores
+function storeInitials () {
+
+}
 startGame.onclick = timeHandler;
-answerSectionEvent.addEventListener("click", nextQuestion);
+endGame.onclick= endQuiz;
+answerSectionEvent.addEventListener("click", playerAns);
 
 // var index = 0;
 // var time = 100
