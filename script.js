@@ -11,6 +11,11 @@ let answerContainer = document.querySelector('.answerSection');
 let questionContainer = document.querySelector('.questionSection');
 let questionDisplay = document.querySelector('.questionStyle');
 let questionNumber = 0;
+let question = document.createElement('p');
+let answerBtn1 = document.createElement('button');
+let answerBtn2 = document.createElement('button');
+let answerBtn3 = document.createElement('button');
+let answerBtn4 = document.createElement('button');
 
 let questionData = [
     {
@@ -36,13 +41,13 @@ let answers = [ans1, ans2, ans3, ans4];
 
 // this function starts the game time and displays it 
 let timeHandler = function () {
+    createQuestionAnswerElement();
     nextQuestion();
     let startGameTimeEl = 100;
     let timeInterval = setInterval(function () {
         if (startGameTimeEl > 1) {
         currentTimeEl.textContent = startGameTimeEl + ' seconds remaining';
         startGameTimeEl--;
-
     }
     else if (startGameTimeEl === 1) {
         currentTimeEl.textContent = startGameTimeEl + ' second remaining';
@@ -57,35 +62,10 @@ let timeHandler = function () {
 }
 // this function will create the question and answer buttons on the page
  function answerButtonHandler () {
-
-    question = document.createElement('p');
-    question.className ='questionStyle';
-    question.textContent = questionData[questionNumber].title;
-    questionContainer.appendChild(question);
-
-    answerBtn1 = document.createElement('button');
-    answerBtn1.className = 'answerBtn';
-    answerBtn1.setAttribute = ('btn-id');
     answerBtn1.textContent = questionData[questionNumber].choices[0];
-    answerContainer.appendChild(answerBtn1);
-
-    answerBtn2 = document.createElement('button');
-    answerBtn2.className = 'answerBtn';
-    answerBtn2.setAttribute = ('btn-id');
     answerBtn2.textContent = questionData[questionNumber].choices[1];
-    answerContainer.appendChild(answerBtn2);
-
-    answerBtn3 = document.createElement('button');
-    answerBtn3.className = 'answerBtn';
-    answerBtn3.setAttribute = ('btn-id');
     answerBtn3.textContent = questionData[questionNumber].choices[2];
-    answerContainer.appendChild(answerBtn3);
-
-    answerBtn4 = document.createElement('button');
-    answerBtn4.className = 'answerBtn';
-    answerBtn4.setAttribute = ('btn-id');
     answerBtn4.textContent = questionData[questionNumber].choices[3];
-    answerContainer.appendChild(answerBtn4);
 }
 // this functoin will generate the next question and determines the right answer
 function nextQuestion (q) {
@@ -101,14 +81,34 @@ function nextQuestion (q) {
         window.alert("the game is now finished");
         questionNumber ='';
         removeChild(answerContainer);
+        currentTimeEl -= 10;
     }else {
         questionNumber ++;
     }
 }
 
-function resetState () {
-    getElementById('answerSectionEvent') 
-    answerContainer.removeChild();
+function createQuestionAnswerElement () { 
+    question.className ='questionStyle';
+    question.textContent = questionData[questionNumber].title;
+    questionContainer.appendChild(question);
+
+    answerBtn1.className = 'answerBtn';
+    answerBtn1.setAttribute = ('btn-id');
+    answerContainer.appendChild(answerBtn1);
+
+    answerBtn2.className = 'answerBtn';
+    answerBtn2.setAttribute = ('btn-id');
+    answerContainer.appendChild(answerBtn2);
+
+
+    answerBtn3.className = 'answerBtn';
+    answerBtn3.setAttribute = ('btn-id');
+    answerContainer.appendChild(answerBtn3);
+
+    answerBtn4.className = 'answerBtn';
+    answerBtn4.setAttribute = ('btn-id');
+    answerContainer.appendChild(answerBtn4);
+
 }
 
 startGame.onclick = timeHandler;
