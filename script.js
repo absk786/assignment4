@@ -10,6 +10,7 @@ let endGame = document.getElementById('endBtn');
 let finishGameTimeEl = 0;
 let playerAns ='';
 let currentIndex=0;
+let timeRemaining = 30;
 let questionData = [
     {
         title:"This is question1", 
@@ -41,15 +42,14 @@ function runGame () {
 
 // this function starts the game time and displays it 
 function timeHandler () {
-    let startGameTimeEl = 20;    
     let timeInterval = setInterval (function () {
-    if (startGameTimeEl > 1) {
-        currentTimeEl.textContent = startGameTimeEl + ' seconds remaining';
-        startGameTimeEl--;
+    if (timeRemaining > 1) {
+        currentTimeEl.textContent = timeRemaining + ' seconds remaining';
+        timeRemaining--;
     }
-    else if (startGameTimeEl === 1) {
-        currentTimeEl.textContent = startGameTimeEl + ' second remaining';
-        startGameTimeEl--;
+    else if (timeRemaining === 1) {
+        currentTimeEl.textContent = timeRemaining + ' second remaining';
+        timeRemaining--;
     }
     else {
         currentTimeEl.textContent == '';
@@ -67,8 +67,7 @@ playerAns = event.target.textContent;
         removeExistingQuestionAnswerChildEl();
         nextQuestion();
         } else if (this.value !== questionData[currentIndex].answer) {
-            // startGameTimeEl -= 10;
-            console.log(questionData[currentIndex].answer);
+            timeRemaining -= 10;
             removeExistingQuestionAnswerChildEl();
             nextQuestion ();
         }else if (currentIndex === questionData.length ) {
