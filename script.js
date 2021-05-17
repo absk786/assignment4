@@ -1,15 +1,13 @@
 
 // function to clear reset the score table
 
-let answerSectionEvent = document.querySelector('#answerSectionEvent');
-let finishGameTimeEl = 0;
+// let answerSectionEvent = document.querySelector('#answerSectionEvent');
+let answerContainer = document.querySelector('.answerSection');
+let questionContainer = document.querySelector('.questionSection');
 let currentTimeEl = document.getElementById('currentTimeEl')
 let startGame =document.getElementById('startBtn');
 let endGame = document.getElementById('endBtn');
-let answerContainer = document.querySelector('.answerSection');
-let questionContainer = document.querySelector('.questionSection');
-let questionDisplay = document.querySelector('.questionStyle');
-let questionNumber = 0;
+let finishGameTimeEl = 0;
 let playerAns ='';
 let currentIndex=0;
 let questionData = [
@@ -25,12 +23,12 @@ let questionData = [
 
     },{
         title:"this is question3", 
-        choices:["question 3 answer 1",'question 3 answer 2','question 3 answer 3','question 3 answer 4'],
+        choices:["question 3 answer 1",'correct answer','question 3 answer 3','question 3 answer 4'],
         answer:"correct answer"
 
     },{
         title:"this is question4", 
-        choices:["question 4 answer 1",'correct answer','question 4 answer 3','correct answer'],
+        choices:["question 4 answer 1",'correct answer','question 4 answer 2','question 4 answer 3'],
         answer:"correct answer"
 
     },
@@ -40,11 +38,10 @@ function runGame () {
     timeHandler();
     nextQuestion();
 }
+
 // this function starts the game time and displays it 
 function timeHandler () {
-    let startGameTimeEl = 20;
-    console.log("player ans =", playerAns);
-    
+    let startGameTimeEl = 20;    
     let timeInterval = setInterval (function () {
     if (startGameTimeEl > 1) {
         currentTimeEl.textContent = startGameTimeEl + ' seconds remaining';
@@ -57,25 +54,29 @@ function timeHandler () {
     else {
         currentTimeEl.textContent == '';
         clearInterval(timeInterval);
-        window.alert("game over");
+        removeExistingQuestionAnswerChildEl();
+        storeInitials ();
     }
         }, 1000);
 }
 
 // this funtion determines the points logic.
-function pointsCalculator () {startGameTimeEl -= 10;
+function pointsCalculator () {
 playerAns = event.target.textContent; 
-    if (this.value === questionData[currentIndex].answer){
-        remove.c    
+    if (playerAns === questionData[currentIndex].answer){
+        removeExistingQuestionAnswerChildEl();
         nextQuestion();
         } else if (this.value !== questionData[currentIndex].answer) {
+            // startGameTimeEl -= 10;
+            console.log(questionData[currentIndex].answer);
+            removeExistingQuestionAnswerChildEl();
             nextQuestion ();
-        }else if (questionNumber > q) {
+        }else if (currentIndex === questionData.length ) {
             window.alert("the game is now finished");
-            storeInitials();
+            // storeInitials();
 }}
 
-// this functoin will generate the next question
+// this function will generate the next question
 function nextQuestion () {
     let currentQuestion = questionData[currentIndex];
     let questionEl = document.createElement('p');
@@ -93,14 +94,14 @@ function nextQuestion () {
     }
     currentIndex++;
 }
+// function to store the initials function to keep the high scores function to submit the scores
+function storeInitials () {
+}
 // function to stop and reset the game and timer
 function endQuiz () {
     currentTimeEl.textContent == '';
     clearInterval(timeInterval);}
-
-// function to store the initials function to keep the high scores function to submit the scores
-function storeInitials () {
-}
+// this function will remove the existing elements of the question and answer
 function removeExistingQuestionAnswerChildEl (){
     let removeAnswerParent = document.getElementById("answerSectionEvent");
     let removeAnswerChild0 = removeAnswerParent.getElementsByTagName("button")[0];
@@ -120,6 +121,4 @@ function removeExistingQuestionAnswerChildEl (){
 
 startGame.onclick = runGame;
 // endGame.onclick= endQuiz;
-answerSectionEvent.addEventListener("click", playerAns);
-answerBtn.onclick = removeExistingQuestionAnswerChildEl;
-
+answerContainer.addEventListener("click", playerAns);
