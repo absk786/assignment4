@@ -98,8 +98,11 @@ function storeInitials () {
 }
 // function to stop and reset the game and timer
 function endQuiz () {
+    removeExistingQuestionAnswerChildEl ()
     currentTimeEl.textContent == '';
-    clearInterval(timeInterval);}
+    clearInterval(timeInterval);
+}
+
 // this function will remove the existing elements of the question and answer
 function removeExistingQuestionAnswerChildEl (){
     let removeAnswerParent = document.getElementById("answerSectionEvent");
@@ -119,5 +122,5 @@ function removeExistingQuestionAnswerChildEl (){
 }
 
 startGame.onclick = runGame;
-// endGame.onclick= endQuiz;
+endGame.onclick= endQuiz;
 answerContainer.addEventListener("click", playerAns);
