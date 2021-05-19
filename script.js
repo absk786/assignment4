@@ -10,7 +10,13 @@ let endGame = document.getElementById('endBtn');
 let finishGameTimeEl = 0;
 let playerAns ='';
 let currentIndex=0;
-let timeRemaining = 30;
+let timeRemaining = 3;
+let timeInterval;
+let submitButtonEl;
+let previousScore =[];
+let scoresArr = [];
+let scoreDataObj;
+let getInitial = document.getElementById('getInitial');
 let questionData = [
     {
         title:"This is question1", 
@@ -32,6 +38,9 @@ let questionData = [
         choices:["question 4 answer 1",'correct answer','question 4 answer 2','question 4 answer 3'],
         answer:"correct answer"
 
+    },{
+        title:"Well done for completing the quiz", 
+
     },
 ]
 
@@ -42,7 +51,7 @@ function runGame () {
 
 // this function starts the game time and displays it 
 function timeHandler () {
-    let timeInterval = setInterval (function () {
+    timeInterval = setInterval (function () {
     if (timeRemaining > 1) {
         currentTimeEl.textContent = timeRemaining + ' seconds remaining';
         timeRemaining--;
@@ -52,10 +61,13 @@ function timeHandler () {
         timeRemaining--;
     }
     else {
-        currentTimeEl.textContent == '';
+        currentTimeEl.textContent = '';
         clearInterval(timeInterval);
         removeExistingQuestionAnswerChildEl();
-        storeInitials ();
+        let timeOutEl = document.createElement('p');
+        timeOutEl.textContent = "Sorry! Times Up! Enter your initials below!"
+        questionContainer.appendChild(timeOutEl);
+        createInitialEl();
     }
         }, 1000);
 }
@@ -66,13 +78,12 @@ playerAns = event.target.textContent;
     if (playerAns === questionData[currentIndex].answer){
         removeExistingQuestionAnswerChildEl();
         nextQuestion();
-        } else if (this.value !== questionData[currentIndex].answer) {
+        } else if (playerAns !== questionData[currentIndex].answer) {
             timeRemaining -= 10;
             removeExistingQuestionAnswerChildEl();
             nextQuestion ();
         }else if (currentIndex === questionData.length ) {
             window.alert("the game is now finished");
-            // storeInitials();
 }}
 
 // this function will generate the next question
@@ -90,17 +101,63 @@ function nextQuestion () {
         answerBtn.textContent = currentAnswersChoice[i];
         answerContainer.appendChild(answerBtn);
         answerBtn.onclick = pointsCalculator;
-    }
+   
+    if (currentIndex === questionData.length) {
+                removeExistingQuestionAnswerChildEl();
+                storeInitials();
+    } 
+    
+}
     currentIndex++;
+    
 }
 // function to store the initials function to keep the high scores function to submit the scores
-function storeInitials () {
+function createInitialEl () {
+    // create the form element so i can add the input element
+   let storeInitialParentFormEl = document.createElement("form");
+   questionContainer.appendChild(storeInitialParentFormEl); 
+    // create the input element
+    let storeInitialEl = document.createElement("input");
+    storeInitialEl.id = "getInitial";
+    storeInitialEl.placeholder = "Type in your initials"
+    storeInitialEl.textContent = "Enter initials"
+    storeInitialParentFormEl.appendChild(storeInitialEl);
+    // create the submit button
+    submitButtonEl = document.createElement("button");
+    submitButtonEl.id = "submitButton";
+    submitButtonEl.textContent= "Submit Initials";
+    storeInitialParentFormEl.appendChild(submitButtonEl);
 }
+
+function addInitialToStorage () {
+    // ev.preventDefault ();
+    scoresArr = localStorage.getItem("playerExistingScores") || [];
+    // console.log(getInitial.value);
+    
+    // data obj to store intial
+    scoreDataObj ={
+    initial:getElementById("getInitial").value,
+    // time:need to get time of user
+}
+    // push information to array
+    scoresArr.push(scoreDataObj);
+    localStorage.setItem("playerExistingScores", scoresArr);
+    console.log(scoreDataObj);
+
+    // loop through scores array and scores object with new content
+    for (var i =0; i < scoresArr.length; i++) {
+        if (scoresArr.initial === parseInt(scoresArr)) {
+            scoresArr[i].initial = "Initials";
+    }
+}
+}
+
 // function to stop and reset the game and timer
 function endQuiz () {
     removeExistingQuestionAnswerChildEl ()
-    currentTimeEl.textContent == '';
     clearInterval(timeInterval);
+    currentTimeEl.textContent = '';
+    currentIndex=0;
 }
 
 // this function will remove the existing elements of the question and answer
@@ -116,11 +173,12 @@ function removeExistingQuestionAnswerChildEl (){
     removeAnswerParent.removeChild(removeAnswerChild1);
     removeAnswerParent.removeChild(removeAnswerChild2);
     removeAnswerParent.removeChild(removeAnswerChild3);
-    removeQuestionParent.removeChild(removeQuestionChild);
-
-    
+    removeQuestionParent.removeChild(removeQuestionChild);  
 }
 
 startGame.onclick = runGame;
 endGame.onclick= endQuiz;
+submitButtonEl.onclick = addInitial;
 answerContainer.addEventListener("click", playerAns);
+
+
