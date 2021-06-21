@@ -1,6 +1,7 @@
 
 // let answerSectionEvent = document.querySelector('#answerSectionEvent');
 let answerContainer = document.querySelector('.answerSection');
+let mainArea = document.querySelector(".mainArea");
 let questionContainer = document.querySelector('.questionSection');
 let currentTimeEl = document.getElementById('currentTimeEl')
 let startGame =document.getElementById('startBtn');
@@ -8,7 +9,7 @@ let finishGameTimeEl = 0;
 let playerAns ='';
 let currentIndex=0;
 let timeRemaining = 10;
-let timeInterval;
+let timeInterval = '';
 let submitButtonEl = document.getElementById("#f")
 let previousScore =[];
 let scoresArr = [];
@@ -57,8 +58,11 @@ let questionData = [
     }
 ]
 
+// Jquery methods
+$(document).ready(function(){
+
 function runGame () {
-    
+    mainArea.textContent = "";
     if (timeOutEl === "undefined")  { 
     timeHandler();
     nextQuestion();
@@ -74,23 +78,24 @@ function runGame () {
 
 // this function starts the game time and displays it 
 function timeHandler () {
-    clearInterval(timeInterval);
+    console.log("start of time handler")
+    removeStupidTimer(timeRemaining);
     timeInterval = setInterval (function () {
     if (timeRemaining > 1) {
         currentTimeEl.textContent = timeRemaining + ' seconds remaining';
         timeRemaining--;
     }
-    else if (timeRemaining > 1 || currentIndex === questionData.length) {
-        clearInterval(timeInterval);
+    else if (currentIndex === questionData.length) {
+         clearInterval(timeInterval)
         timeRemaining = userTimeScore;
         console.log(userTimeScore);
+        console.log(questionData.length);
+        console.log(currentIndex);
         // createInitialEl();
     }
     else if (timeRemaining === 1) {
         currentTimeEl.textContent = timeRemaining + ' second remaining';
         timeRemaining--;
-        console.log(questionData.length);
-        console.log(currentIndex);
     }
     else {
         currentTimeEl.textContent = '';
@@ -109,21 +114,30 @@ function timeHandler () {
 
 // this funtion determines the points logic.
 function pointsCalculator () {
-playerAns = event.target.textContent; 
+    console.log(this);
+  playerAns = this.textContent 
+// playerAns = event.target.textContent;
+console.log(playerAns) 
     if (playerAns === questionData[currentIndex].answer){
         removeExistingQuestionAnswerChildEl();
         nextQuestion();
-        } else if (playerAns !== questionData[currentIndex].answer) {
+    } else if (questionData.length - 1 === currentIndex){
+        console.log("game finished")
+        console.log(timeRemaining);
+        userTimeScore = timeRemaining
+        console.log(userTimeScore);
+        removeStupidTimer(timeInterval)
+    } 
+    else if (playerAns !== questionData[currentIndex].answer) {
             timeRemaining -= 10;
             removeExistingQuestionAnswerChildEl();
             nextQuestion ();
-        }else if (currentIndex === questionData.length ) {
+    }else if (currentIndex === questionData.length ) {
             window.alert("the game is now finished");
 }
 console.log("points calculator function was called");
-answerContainer.addEventListener("click", playerAns);
+// answerContainer.addEventListener("click", playerAns);
 }
-
 // this function will generate the next question
 function nextQuestion () {
     let currentQuestion = questionData[currentIndex];
@@ -178,14 +192,14 @@ function addInitialToStorage (event) {
     event.preventDefault();
     inputInitials = document.getElementById("getInitial").value;
     console.log(inputInitials);
-
     console.log("addInitialToStorage is called");
     // ev.preventDefault ();
     scoresArr = JSON.parse(localStorage.getItem("playerExistingScores")) || [];
     
     //     // data obj to store intial
     scoreDataObj ={
-    name:inputInitials
+    name:inputInitials,
+    score:timeRemaining
         // initial:getElementById("getInitial").value,  <= this is not working
         // time:need to get time of user
     }
@@ -204,28 +218,38 @@ function gameOver () {
     questionContainer.textContent = "";
     var displayScoresArr = JSON.parse(localStorage.getItem("playerExistingScores"));
     console.log(displayScoresArr);
-    for (var a=0; a < 5; a++) {
+    for (var a=0; a < displayScoresArr.length; a++) {
         let listScoreEl = document.createElement("li");
-        listScoreEl.textContent =  displayScoresArr[a].name;
+        listScoreEl.textContent =  displayScoresArr[a].name + " - " + displayScoresArr[a].score;
         questionContainer.appendChild(listScoreEl);
     } 
+    let restartGameBtns = document.createElement("button");
+    restartGameBtns.textContent = "Restart Game";
+    questionContainer.appendChild(restartGameBtns);
     let storgeClearButton = document.createElement("button");
     storgeClearButton.textContent = "Clear Scores";
     questionContainer.appendChild(storgeClearButton);
-    // submitButtonEl.addEventListener("click", localStorage.clear());
 
-// $(document).ready(function(){
-
-// $('#submitButton').on("click", function (){
-
-//     let allUserScores = $("questionContainer").append("<p>");
-//     allUserScores.textContent = scoresArr;
-//  })
-
-// });
-    // create a P tag and text.content of array
+    storgeClearButton.addEventListener("click", resetScores);
+    restartGameBtns.addEventListener("click", function() {
+        location.reload()
+    });
     console.log("endQuiz function was called");
 }
+
+function removeStupidTimer (timeInterval) { 
+    console.log("timeinterval clear called")
+    clearInterval(timeInterval);
+    currentTimeEl.textContent = userTimeScore
+}
+
+function resetScores () {
+    localStorage.clear()
+    questionContainer.textContent = "";    
+    removeExistingQuestionAnswerChildEl
+    clearInterval(timeInterval);
+}
+
 // this function will remove the existing elements of the question and answer
 function removeExistingQuestionAnswerChildEl (){
 
@@ -258,4 +282,4 @@ function removeExistingQuestionAnswerChildEl (){
 
 startGame.onclick = runGame;
 
-
+});
