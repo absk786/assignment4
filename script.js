@@ -8,7 +8,7 @@ let startGame =document.getElementById('startBtn');
 let finishGameTimeEl = 0;
 let playerAns ='';
 let currentIndex=0;
-let timeRemaining = 10;
+let timeRemaining = 80;
 let timeInterval = '';
 let submitButtonEl = document.getElementById("#f")
 let previousScore =[];
@@ -79,7 +79,7 @@ function runGame () {
 // this function starts the game time and displays it 
 function timeHandler () {
     console.log("start of time handler")
-    removeStupidTimer(timeRemaining);
+    removeTimer(timeRemaining);
     timeInterval = setInterval (function () {
     if (timeRemaining > 1) {
         currentTimeEl.textContent = timeRemaining + ' seconds remaining';
@@ -87,10 +87,10 @@ function timeHandler () {
     }
     else if (currentIndex === questionData.length) {
          clearInterval(timeInterval)
+         console.log("gameOver")
+         gameOver();
         timeRemaining = userTimeScore;
-        console.log(userTimeScore);
-        console.log(questionData.length);
-        console.log(currentIndex);
+
         // createInitialEl();
     }
     else if (timeRemaining === 1) {
@@ -125,8 +125,13 @@ console.log(playerAns)
         console.log("game finished")
         console.log(timeRemaining);
         userTimeScore = timeRemaining
-        console.log(userTimeScore);
-        removeStupidTimer(timeInterval)
+        removeTimer(timeInterval)
+        removeExistingQuestionAnswerChildEl();
+        timeOutEl = document.createElement('p');
+        timeOutEl.textContent = "Game Over! Enter your initials below!"
+        questionContainer.appendChild(timeOutEl);
+        createInitialEl();
+        addInitialToStorage()
     } 
     else if (playerAns !== questionData[currentIndex].answer) {
             timeRemaining -= 10;
@@ -215,7 +220,10 @@ function addInitialToStorage (event) {
 
 // function to stop and reset the game and timer
 function gameOver () {
-    questionContainer.textContent = "";
+    removeExistingQuestionAnswerChildEl()
+    // answerContainer.textContent = "";
+    // questionContainer.textContent = "";
+    addInitialToStorage()
     var displayScoresArr = JSON.parse(localStorage.getItem("playerExistingScores"));
     console.log(displayScoresArr);
     for (var a=0; a < displayScoresArr.length; a++) {
@@ -237,7 +245,7 @@ function gameOver () {
     console.log("endQuiz function was called");
 }
 
-function removeStupidTimer (timeInterval) { 
+function removeTimer (timeInterval) { 
     console.log("timeinterval clear called")
     clearInterval(timeInterval);
     currentTimeEl.textContent = userTimeScore
@@ -275,7 +283,6 @@ function removeExistingQuestionAnswerChildEl (){
     }
     if (removeQuestionChild !== "undefined") {
         removeQuestionParent.removeChild(removeQuestionChild);  
-        
     }
     console.log("removeExistingQuestionAnswerChildEl  function was called");
 }
