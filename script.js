@@ -8,7 +8,7 @@ let startGame =document.getElementById('startBtn');
 let finishGameTimeEl = 0;
 let playerAns ='';
 let currentIndex=0;
-let timeRemaining = 80;
+let timeRemaining = 3;
 let timeInterval = '';
 let submitButtonEl = document.getElementById("#f")
 let previousScore =[];
@@ -131,7 +131,6 @@ console.log(playerAns)
         timeOutEl.textContent = "Game Over! Enter your initials below!"
         questionContainer.appendChild(timeOutEl);
         createInitialEl();
-        addInitialToStorage()
     } 
     else if (playerAns !== questionData[currentIndex].answer) {
             timeRemaining -= 10;
@@ -190,40 +189,63 @@ function createInitialEl () {
     // add the button to the parent
     storeInitialParentFormEl.appendChild(submitButtonEl);
     // storeInitialEl.textContent
-    submitButtonEl.addEventListener("click", addInitialToStorage);
+    submitButtonEl.addEventListener("click",  function(event){
+        event.preventDefault ();
+        inputInitials = document.getElementById("getInitial").value;
+        console.log(inputInitials);
+        console.log("addInitialToStorage is called");
+        scoresArr = JSON.parse(localStorage.getItem("playerExistingScores")) || [];
+        
+        //     // data obj to store intial
+        scoreDataObj ={
+        name:inputInitials,
+        score:timeRemaining
+            // initial:getElementById("getInitial").value,  <= this is not working
+            // time:need to get time of user
+        }
+        console.log(scoreDataObj);
+        // push information to array
+        scoresArr.push(scoreDataObj);
+        console.log(scoresArr);
+        localStorage.setItem("playerExistingScores", JSON.stringify(scoresArr));
+        console.log(scoreDataObj);
+        console.log("add initials to storage function was called");
+        gameOver();
+    
+
+    });
 }
 
-function addInitialToStorage (event) {
-    event.preventDefault();
-    inputInitials = document.getElementById("getInitial").value;
-    console.log(inputInitials);
-    console.log("addInitialToStorage is called");
-    // ev.preventDefault ();
-    scoresArr = JSON.parse(localStorage.getItem("playerExistingScores")) || [];
+// function addInitialToStorage(event){
+//     event.preventDefault()
+//     inputInitials = document.getElementById("getInitial").value;
+//     console.log(inputInitials);
+//     console.log("addInitialToStorage is called");
+//     // ev.preventDefault ();
+//     scoresArr = JSON.parse(localStorage.getItem("playerExistingScores")) || [];
     
-    //     // data obj to store intial
-    scoreDataObj ={
-    name:inputInitials,
-    score:timeRemaining
-        // initial:getElementById("getInitial").value,  <= this is not working
-        // time:need to get time of user
-    }
-    console.log(scoreDataObj);
-    // push information to array
-    scoresArr.push(scoreDataObj);
-    console.log(scoresArr);
-    localStorage.setItem("playerExistingScores", JSON.stringify(scoresArr));
-    console.log(scoreDataObj);
-    console.log("add initials to storage function was called");
-    gameOver();
-}
+//     //     // data obj to store intial
+//     scoreDataObj ={
+//     name:inputInitials,
+//     score:timeRemaining
+//         // initial:getElementById("getInitial").value,  <= this is not working
+//         // time:need to get time of user
+//     }
+//     console.log(scoreDataObj);
+//     // push information to array
+//     scoresArr.push(scoreDataObj);
+//     console.log(scoresArr);
+//     localStorage.setItem("playerExistingScores", JSON.stringify(scoresArr));
+//     console.log(scoreDataObj);
+//     console.log("add initials to storage function was called");
+//     gameOver();
+// }
 
 // function to stop and reset the game and timer
 function gameOver () {
-    removeExistingQuestionAnswerChildEl()
-    // answerContainer.textContent = "";
-    // questionContainer.textContent = "";
-    addInitialToStorage()
+    questionContainer.textContent = "";    
+    // removeExistingQuestionAnswerChildEl()
+    // addInitialToStorage()
     var displayScoresArr = JSON.parse(localStorage.getItem("playerExistingScores"));
     console.log(displayScoresArr);
     for (var a=0; a < displayScoresArr.length; a++) {
@@ -253,8 +275,9 @@ function removeTimer (timeInterval) {
 
 function resetScores () {
     localStorage.clear()
-    questionContainer.textContent = "";    
-    removeExistingQuestionAnswerChildEl
+    location.reload()
+    // questionContainer.textContent = "";    
+    // removeExistingQuestionAnswerChildEl
     clearInterval(timeInterval);
 }
 
